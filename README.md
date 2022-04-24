@@ -28,7 +28,14 @@ python opencv_draw_binarize.py
 3. 画面のリセット
     再度 t を押し、画面をクリアする
 4. マウスをドラッグし、寸法を描画していく
+    l を押すとラインの色を変更できる
 5. 保存する
     s を押しスクショ画面を保存する
     data フォルダにスクショ画像が保存される
 </pre>
+
+![pic1](https://user-images.githubusercontent.com/60864155/164954847-6189c714-4604-4f87-8fa0-c76cf9eca245.JPG)
+
+![pic2](https://user-images.githubusercontent.com/60864155/164954875-b3ad7aed-ae3f-4ec2-8332-aefec431f8bc.JPG)
+
+![pic3](https://user-images.githubusercontent.com/60864155/164954889-55be903c-173d-4f0b-876b-5b21bbc362f7.JPG)
