@@ -18,6 +18,7 @@ correction = 1
 box_list =[]
 tempcopy = False
 thresh_flag = False
+data_dir = 'data'
 
 # OpenCVのバージョン
 version = cv2.__version__.split(".")
@@ -185,13 +186,16 @@ def main():
                 thresh(im_gray,threshold)
                 max_area(img_thresh,roi)
         elif key ==ord('s'):
+            if not os.path.exists(data_dir):
+                # ディレクトリが存在しない場合、ディレクトリを作成する
+                os.makedirs(data_dir)
             if (tempcopy):
-                cv2.imwrite('01_original.png', orign)
-                cv2.imwrite('02_draw.png', temp)
+                cv2.imwrite(f'{data_dir}/01_original.png', orign)
+                cv2.imwrite(f'{data_dir}/02_draw.png', temp)
                 if (thresh_flag):
-                    cv2.imwrite('03_img_thresh.png', img_thresh)
-                    cv2.imwrite('04_mg_thresh_max.png', img_thresh_max_bn)
-                    cv2.imwrite('05_roi_max.png', roi_max)
+                    cv2.imwrite(f'{data_dir}/03_img_thresh.png', img_thresh)
+                    cv2.imwrite(f'{data_dir}/04_mg_thresh_max.png', img_thresh_max_bn)
+                    cv2.imwrite(f'{data_dir}/05_roi_max.png', roi_max)
                 print('save files')
 
     cv2.destroyAllWindows()
