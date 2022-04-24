@@ -2,6 +2,7 @@ import os
 os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 import cv2
 import numpy as np
+import tkinter
 
 # カメラのキャプチャ
 capture = cv2.VideoCapture(0)
@@ -19,10 +20,58 @@ box_list =[]
 tempcopy = False
 thresh_flag = False
 data_dir = 'data'
+actual_size = 10
 
 # OpenCVのバージョン
 version = cv2.__version__.split(".")
 CVversion = int(version[0])
+
+class CorrectionEntryBox:
+    
+    def __init__(self, actual_size):
+        self.actual_size = actual_size
+        # 画面作成
+        self.tki = self._make_window()
+        # ラベルとテキストボックス
+        self.lbl, self.txt = self._make_text_box()
+
+        # ボタン
+        btn = tkinter.Button(self.tki, text='適用', command=self._btn_click)
+        btn.place(x=30, y=60)
+    
+    def _make_window(self):
+        # 画面作成
+        tki = tkinter.Tk()
+        tki.geometry('200x100')
+        tki.title('')
+        return tki
+    
+    def _make_text_box(self):
+        # ラベル
+        lbl = tkinter.Label(text='実スケール入力')
+        lbl.place(x=30, y=5)
+        # テキストボックス
+        txt = tkinter.Entry(width=20)
+        txt.insert(0, self.actual_size)
+        txt.place(x=30, y=35)
+        return lbl, txt
+    
+    def _btn_click(self):
+        # テキスト取得
+        range_str = self.txt.get()
+        if range_str.isdigit():
+            self.actual_size = int(range_str)
+        else:
+            print("数値を入力してください")
+        self.tki.destroy()
+    
+    def open_window(self):
+        # 画面をそのまま表示
+        self.tki.mainloop()
+    
+    def get_actual_size(self):
+        # 線分の実寸値を取得
+        return self.actual_size
 
 # マウスコールバック関数
 def my_mouse_callback(event,x,y,flags,param):
@@ -86,7 +135,7 @@ def max_area(img_thresh,roi):
 
 # メイン関数
 def main():
-    global ix,iy,width,height,box,drawing,complete_region,correction,kx,ky,tempcopy
+    global ix,iy,width,height,box,drawing,complete_region,correction,kx,ky,tempcopy,data_dir, actual_size
 
     source_window = "draw_window"
     cv2.namedWindow(source_window)
@@ -164,10 +213,14 @@ def main():
             temp00 = frame.copy()
             orign = frame.copy()
         elif key ==ord('c'):
+            correction_entry_box = CorrectionEntryBox(actual_size)
+            correction_entry_box.open_window()
+            actual_size = correction_entry_box.get_actual_size()
+            print(actual_size)
             if width > 0:
-                correction = 10 / width
+                correction = actual_size / width
             elif width < 0:
-                correction = 10 / (width*-1)
+                correction = actual_size / (width*-1)
         elif key ==ord('l'):
             if linecolour == (0,255,0):
                 linecolour = (0,0,255)
